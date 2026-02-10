@@ -11,15 +11,17 @@ import { cn } from "@/lib/utils";
 export default function ChatPage() {
   const { messages, sendMessage, status } = useChat();
   const [input, setInput] = useState("");
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
@@ -27,44 +29,42 @@ export default function ChatPage() {
       text: input,
     });
     setInput("");
+    setTimeout(scrollToBottom, 100);
   };
 
   const isLoading = status === "submitted" || status === "streaming";
 
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto p-4">
-      <div className="flex-1 overflow-hidden mb-4">
-        <ScrollArea className="h-full pr-4">
-          <div className="space-y-4" ref={scrollRef}>
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={cn("flex", message.role === "user" ? "justify-end" : "justify-start")}
-              >
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full">
+          <div className="space-y-4 ">
+            {messages.map((message) => {
+              return (
                 <div
-                  className={cn(
-                    "max-w-[80%] p-2 rounded-md",
-                    message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted",
-                  )}
+                  key={message.id}
+                  className={cn("flex", message.role === "user" ? "justify-end" : "justify-start")}
                 >
-                  <div className="text-sm whitespace-pre-wrap">
-                    {message.parts.map((part, i) => {
-                      if (part.type === "text") {
-                        return <span key={i}>{part.text}</span>;
-                      }
-                      return null;
-                    })}
+                  <div
+                    className={cn(
+                      "max-w-[80%]  rounded-md",
+                      message.role === "user" ? "bg-primary text-primary-foreground p-2" : "bg-muted p-2",
+                    )}
+                  >
+                    <div className="text-sm whitespace-pre-wrap">
+                      {message.parts.map((part, i) => {
+                        if (part.type === "text") {
+                          return <span key={i}>{part.text}</span>;
+                        }
+                        return null;
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                {/* <Card className="bg-muted p-4"> */}
-                <Loader2 className="h-4 w-4 animate-spin" />
-                {/* </Card> */}
-              </div>
-            )}
+              );
+            })}
+            {isLoading && <Loader2 className="size-4 animate-spin" />}
+            <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
       </div>
