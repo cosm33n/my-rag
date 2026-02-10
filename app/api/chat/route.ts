@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     console.log(util.inspect(messages, { depth: Infinity, colors: true }));
 
     const result = streamText({
-      model: openai("chatgpt-4o-latest"),
+      model: openai("gpt-4o-mini"),
       messages: await convertToModelMessages(messages),
       tools,
       system: `You are a helpful assistant with access to a knowledge base. 
