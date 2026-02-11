@@ -32,9 +32,8 @@ export function SignInForm() {
       }
 
       if (data) {
-        console.log("✅ Signed in successfully:", data);
         // Redirect to dashboard or home page
-        router.push("/");
+        router.push("/chat");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");

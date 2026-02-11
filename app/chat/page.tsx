@@ -35,10 +35,10 @@ export default function ChatPage() {
   const isLoading = status === "submitted" || status === "streaming";
 
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto p-4">
-      <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full">
-          <div className="space-y-4 ">
+    <div className="max-w-4xl mx-auto p-6 h-[calc(100vh-64px)] flex flex-col gap-6">
+      <div className="flex-1 min-h-0">
+        <ScrollArea className="h-full rounded-md">
+          <div className="space-y-4">
             {messages.map((message) => {
               return (
                 <div
@@ -47,8 +47,8 @@ export default function ChatPage() {
                 >
                   <div
                     className={cn(
-                      "max-w-[80%]  rounded-md",
-                      message.role === "user" ? "bg-primary text-primary-foreground p-2" : "bg-muted p-2",
+                      "max-w-[80%] rounded-md p-2",
+                      message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted",
                     )}
                   >
                     <div className="text-sm whitespace-pre-wrap">
@@ -85,7 +85,7 @@ export default function ChatPage() {
           }}
         />
         <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
-          <Send className="h-4 w-4" />
+          <Send className="size-4" />
         </Button>
       </form>
     </div>
