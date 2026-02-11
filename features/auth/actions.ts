@@ -1,9 +1,12 @@
+"use server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-const someAuthenticatedAction = async () => {
-  "use server";
-  const session = await auth.api.getSession({
+export async function signOutAction() {
+  await auth.api.signOut({
     headers: await headers(),
   });
-};
+
+  redirect("/sign-in");
+}

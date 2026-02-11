@@ -2,42 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/lib/auth-client";
+import { signOutAction } from "@/features/auth/actions";
 
 export function Navbar() {
   const pathname = usePathname();
-  const { data: session, isPending } = useSession();
+  const { data: session } = useSession();
 
-  const handleSignOut = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          window.location.href = "/sign-in";
-        },
-      },
-    });
-  };
-
-  // Don't show navbar on auth pages
-  if (pathname.startsWith("/(auth)") || pathname === "/sign-in") {
+  if (pathname === "/sign-in") {
     return null;
   }
-
-  // Show loading state while session is being fetched
-  if (isPending) {
-    return (
-      <nav className="border-b border-gray-700 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-16 flex items-center">
-            <div className="animate-pulse h-8 w-32 bg-gray-700 rounded" />
-          </div>
-        </div>
-      </nav>
-    );
-  }
-
   if (!session) {
     return null;
   }
@@ -72,7 +47,7 @@ export function Navbar() {
               </Link>
             </div>
           </div>
-          <Button onClick={handleSignOut} variant="outline" size="sm">
+          <Button onClick={signOutAction} variant="outline" size="sm">
             Sign out
           </Button>
         </div>

@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased grid grid-rows-[64px_1fr] `}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased grid grid-rows-[64px_1fr]`}>
         <TooltipProvider>
           <Navbar />
           <div>{children}</div>
