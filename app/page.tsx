@@ -5,7 +5,7 @@ export default async function Page() {
   const documentsResponse = await db.select().from(documentsTable).limit(10);
 
   return (
-    <div>
+    <div className="p-4 text-center">
       <h1 className="text-2xl font-bold mb-4">Documents</h1>
       <ul>
         {documentsResponse.map((doc) => (

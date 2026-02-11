@@ -5,16 +5,34 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/lib/auth-client";
 import { signOutAction } from "@/features/auth/actions";
+import { Spinner } from "@/components/ui/spinner";
 
 export function Navbar() {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { isPending } = useSession();
 
   if (pathname === "/sign-in") {
     return null;
   }
-  if (!session) {
-    return null;
+  // if (!session) {
+  //   return null;
+  // }
+
+  if (isPending) {
+    return (
+      <nav className="border-b border-gray-700 bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-8">
+              <Link href="/" className="text-lg font-semibold text-white">
+                My RAG
+              </Link>
+            </div>
+            <Spinner />
+          </div>
+        </div>
+      </nav>
+    );
   }
 
   const isUploadActive = pathname === "/upload";
@@ -25,7 +43,9 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
-            <div className="text-lg font-semibold text-white">My RAG</div>
+            <Link href="/" className="text-lg font-semibold text-white">
+              My RAG
+            </Link>
             <div className="flex space-x-4">
               <Link
                 href="/chat"
